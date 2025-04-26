@@ -1,5 +1,5 @@
 # Handles encryption and replacement
-from sentinel.secure import load_key
+from secapi.secure import load_key
 import os
 import re
 import json
@@ -7,7 +7,7 @@ from getpass import getpass
 from cryptography.fernet import Fernet
 import base64
 
-VAULT_PATH = os.path.expanduser("~/.sentinelai_vault.json")
+VAULT_PATH = os.path.expanduser("~/.secapi_vault.json")
 
 def get_fernet():
     """

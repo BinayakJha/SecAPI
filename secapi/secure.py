@@ -3,7 +3,7 @@ import os
 from getpass import getpass
 from cryptography.fernet import Fernet
 
-VAULT_PATH = os.path.expanduser("~/.sentinelai_vault.json")
+VAULT_PATH = os.path.expanduser("~/.secapi_vault.json")
 
 import base64
 

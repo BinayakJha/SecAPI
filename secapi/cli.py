@@ -1,14 +1,14 @@
 import argparse
-from sentinel.scanner import scan_directory
-from sentinel.fixer import suggest_and_fix
-from sentinel.secure import load_key, list_keys, delete_key, rotate_key  # assuming you also move these here
-from sentinel.scanner_ai import ai_scan_path
-from sentinel.secure import add_key_interactively
+from secapi.scanner import scan_directory
+from secapi.fixer import suggest_and_fix
+from secapi.secure import load_key, list_keys, delete_key, rotate_key  # assuming you also move these here
+from secapi.scanner_ai import ai_scan_path
+from secapi.secure import add_key_interactively
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description="SentinelAI - Secure your API keys before they leak."
+        description="SecAPI - Secure your API keys before they leak."
     )
     parser.add_argument(
         "command", metavar="command", type=str,

@@ -1,11 +1,11 @@
-from sentinel.secure import load_key
+from secapi.secure import load_key
 import os
 import re
 import json
 from getpass import getpass
 from openai import OpenAI
 from cryptography.fernet import Fernet
-from sentinel.secure import get_fernet, VAULT_PATH
+from secapi.secure import get_fernet, VAULT_PATH
 
 
 def ai_scan_file(file_path):

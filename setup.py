@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='sentinelai',
+    name='secapi',
     version='0.1.0',
     packages=find_packages(),
     install_requires=[
@@ -9,7 +9,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'sentinel=sentinel.cli:main',  # 👈 Enables CLI command
+            'secapi=secapi.cli:main',  # 👈 Enables CLI command
         ],
     },
     author='Binayak Jha',
