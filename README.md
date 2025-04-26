@@ -8,7 +8,7 @@ SecAPI is a Python-based tool designed to help developers securely manage and st
 - **Secure API Key Management**: Safeguard your keys with encryption both at rest and in transit.
 - **Automated Key Rotation**: Automatically rotate your API keys to minimize exposure risks.
 - **Easy CLI Interface**: Manage your keys with simple commands for checking, rotating, listing, and deleting keys.
-- **Seamless Integration**: Integrates easily with your development environment, supporting Python-based applications.
+- **Seamless Integration**: Integrates easily with your development environment, supporting Python-based applications (**for now**).
 - **AI-Powered Security**: secapi uses machine learning algorithms to detect potential vulnerabilities and recommend security enhancements.
 - **Comprehensive Auditing**: Keep track of all key access events for full transparency and compliance.
 
