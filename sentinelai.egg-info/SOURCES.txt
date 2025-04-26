@@ -1,0 +1,14 @@
+README.md
+setup.py
+sentinel/__init__.py
+sentinel/cli.py
+sentinel/fixer.py
+sentinel/scanner.py
+sentinel/scanner_ai.py
+sentinel/secure.py
+sentinelai.egg-info/PKG-INFO
+sentinelai.egg-info/SOURCES.txt
+sentinelai.egg-info/dependency_links.txt
+sentinelai.egg-info/entry_points.txt
+sentinelai.egg-info/requires.txt
+sentinelai.egg-info/top_level.txt
