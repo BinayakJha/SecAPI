@@ -39,7 +39,7 @@ secapi is operated through a command-line interface (CLI). After installing, you
 To get started, you can check the available commands:
 
 ```bash
-sentinel -h
+secapi -h
 ```
 
 ### **Commands**
@@ -48,51 +48,51 @@ sentinel -h
    - Scans the given directory for any unprotected API keys or sensitive data.
    - **Example**:  
      ```bash
-     sentinel check /path/to/project
+     secapi check /path/to/project
      ```
 
 2. **`list`**:
    - Lists all stored API keys in your secapi vault.
    - **Example**:  
      ```bash
-     sentinel list
+     secapi list
      ```
 
 3. **`delete <key_name>`**:
    - Deletes a specific API key from the vault.
    - **Example**:  
      ```bash
-     sentinel delete my-api-key
+     secapi delete my-api-key
      ```
 
 4. **`rotate <key_name>`**:
    - Rotates the specified API key and updates it in the vault.
    - **Example**:  
      ```bash
-     sentinel rotate my-api-key
+     secapi rotate my-api-key
      ```
 
 5. **`load <key_name>`**:
    - Loads a specific API key for use in the application.
    - **Example**:  
      ```bash
-     sentinel load my-api-key
+     secapi load my-api-key
      ```
 
 ### **Help Command**
 For any command, you can get help and see options by running:
 
 ```bash
-sentinel <command> -h
+secapi <command> -h
 ```
 
 ---
 
 ## **Configuration**
 
-To configure secapi, simply create a configuration file called `sentinel_config.yaml` in your project directory. Here, you can define security settings, like the frequency of key rotation, and specify encryption options.
+To configure secapi, simply create a configuration file called `secapi_config.yaml` in your project directory. Here, you can define security settings, like the frequency of key rotation, and specify encryption options.
 
-**Example `sentinel_config.yaml`:**
+**Example `secapi_config.yaml`:**
 
 ```yaml
 security:
