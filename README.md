@@ -1,15 +1,15 @@
 
-# **SentinelAI: Secure Your API Keys Before They Leak**
+# **SecAPI: Secure Your API Keys Before They Leak**
 
 ## **Overview**
-SentinelAI is a Python-based tool designed to help developers securely manage and store API keys, credentials, and sensitive information. It offers automated key rotation, end-to-end encryption, and role-based access control to ensure that your API keys remain safe and protected against unauthorized access. Whether you're working on a personal project, a startup, or managing large-scale enterprise-level applications, SentinelAI provides a straightforward and secure solution for API key management.
+SecAPI is a Python-based tool designed to help developers securely manage and store API keys, credentials, and sensitive information. It offers automated key rotation, end-to-end encryption, and role-based access control to ensure that your API keys remain safe and protected against unauthorized access. Whether you're working on a personal project, a startup, or managing large-scale enterprise-level applications, secapi provides a straightforward and secure solution for API key management.
 
 ## **Features**
 - **Secure API Key Management**: Safeguard your keys with encryption both at rest and in transit.
 - **Automated Key Rotation**: Automatically rotate your API keys to minimize exposure risks.
 - **Easy CLI Interface**: Manage your keys with simple commands for checking, rotating, listing, and deleting keys.
 - **Seamless Integration**: Integrates easily with your development environment, supporting Python-based applications.
-- **AI-Powered Security**: SentinelAI uses machine learning algorithms to detect potential vulnerabilities and recommend security enhancements.
+- **AI-Powered Security**: secapi uses machine learning algorithms to detect potential vulnerabilities and recommend security enhancements.
 - **Comprehensive Auditing**: Keep track of all key access events for full transparency and compliance.
 
 ---
@@ -21,20 +21,20 @@ SentinelAI is a Python-based tool designed to help developers securely manage an
 - pip (Python package manager)
 
 ### **Installation via pip**
-To install SentinelAI as a Python package, simply run the following command:
+To install secapi as a Python package, simply run the following command:
 
 ```bash
-pip install sentinelai
+pip install secapi
 ```
 
-This will install the latest version of SentinelAI and its dependencies.
+This will install the latest version of secapi and its dependencies.
 
 ---
 
 ## **Usage**
 
 ### **Command-Line Interface (CLI)**
-SentinelAI is operated through a command-line interface (CLI). After installing, you can run the tool by typing `sentinel` followed by the desired command.
+secapi is operated through a command-line interface (CLI). After installing, you can run the tool by typing `sentinel` followed by the desired command.
 
 To get started, you can check the available commands:
 
@@ -52,7 +52,7 @@ sentinel -h
      ```
 
 2. **`list`**:
-   - Lists all stored API keys in your SentinelAI vault.
+   - Lists all stored API keys in your secapi vault.
    - **Example**:  
      ```bash
      sentinel list
@@ -90,7 +90,7 @@ sentinel <command> -h
 
 ## **Configuration**
 
-To configure SentinelAI, simply create a configuration file called `sentinel_config.yaml` in your project directory. Here, you can define security settings, like the frequency of key rotation, and specify encryption options.
+To configure secapi, simply create a configuration file called `sentinel_config.yaml` in your project directory. Here, you can define security settings, like the frequency of key rotation, and specify encryption options.
 
 **Example `sentinel_config.yaml`:**
 
@@ -105,16 +105,16 @@ security:
 
 ## **How It Works**
 
-1. **Key Rotation**: SentinelAI automatically rotates your API keys to ensure they are always up-to-date and secure. When you use the `rotate` command, it generates a new key, replaces the old one, and securely updates it in the system.
-2. **Encryption**: SentinelAI uses industry-standard encryption to protect stored keys. It ensures that keys are never exposed in plaintext, both in storage and during transmission.
-3. **AI-Powered Scanning**: SentinelAI scans your project directories for exposed keys and sensitive data, making it easier to spot potential vulnerabilities.
-4. **Auditing**: SentinelAI logs all actions performed on your keys, such as creation, modification, deletion, and access, ensuring compliance and traceability.
+1. **Key Rotation**: secapi automatically rotates your API keys to ensure they are always up-to-date and secure. When you use the `rotate` command, it generates a new key, replaces the old one, and securely updates it in the system.
+2. **Encryption**: secapi uses industry-standard encryption to protect stored keys. It ensures that keys are never exposed in plaintext, both in storage and during transmission.
+3. **AI-Powered Scanning**: secapi scans your project directories for exposed keys and sensitive data, making it easier to spot potential vulnerabilities.
+4. **Auditing**: secapi logs all actions performed on your keys, such as creation, modification, deletion, and access, ensuring compliance and traceability.
 
 ---
 
 ## **Contributing**
 
-We welcome contributions to SentinelAI! Whether you're fixing bugs, improving documentation, or adding new features, we appreciate your input.
+We welcome contributions to secapi! Whether you're fixing bugs, improving documentation, or adding new features, we appreciate your input.
 
 ### **How to Contribute**
 1. **Fork the repository**:  
@@ -122,7 +122,7 @@ We welcome contributions to SentinelAI! Whether you're fixing bugs, improving do
    
 2. **Clone your fork**:
    ```bash
-   git clone https://github.com/your-username/sentinelai.git
+   git clone https://github.com/your-username/secapi.git
    ```
 
 3. **Create a branch**:
@@ -163,4 +163,4 @@ For any questions or support, feel free to open an issue or contact us at [email
 ---
 
 ### **Acknowledgments**
-- **Thanks to the open-source community** for their contributions to tools and libraries that power SentinelAI.
+- **Thanks to the open-source community** for their contributions to tools and libraries that power secapi.
