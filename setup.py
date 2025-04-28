@@ -5,11 +5,12 @@ setup(
     version='0.1.0',
     packages=find_packages(),
     install_requires=[
-        'cryptography>=41.0.0'
+        'cryptography>=41.0.0',
+        'openai',
     ],
     entry_points={
         'console_scripts': [
-            'secapi=secapi.cli:main',  # 👈 Enables CLI command
+            'secapi=secapi.cli:main',  # This enables the `secapi` command
         ],
     },
     author='Binayak Jha',

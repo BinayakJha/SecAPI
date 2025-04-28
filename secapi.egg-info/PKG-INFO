@@ -8,6 +8,7 @@ Classifier: Programming Language :: Python :: 3
 Classifier: License :: OSI Approved :: MIT License
 Classifier: Operating System :: OS Independent
 Requires-Dist: cryptography>=41.0.0
+Requires-Dist: openai
 Dynamic: author
 Dynamic: classifier
 Dynamic: keywords
