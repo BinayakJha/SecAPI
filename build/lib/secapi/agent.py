@@ -8,7 +8,7 @@ def interpret_command(user_input):
     """
     try:
         # Load the API key securely
-        openai.api_key = "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"
+        openai.api_key = "your-key-here"  # Replace with your OpenAI API key or load it securely
 
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",  # Use the latest GPT model
