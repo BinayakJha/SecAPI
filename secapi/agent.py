@@ -5,7 +5,7 @@ from secapi.secure import load_key, add_key_interactively, list_keys
 class SecAPIAgent:
     def __init__(self):
         # Load the OpenAI API key securely
-        openai.api_key = load_key("openai_api_key")
+        openai_api_key = load_key("openai_api_key")
         self.command_map = {
             "add": "add",
             "add api": "add",
