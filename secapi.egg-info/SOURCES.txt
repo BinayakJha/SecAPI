@@ -1,7 +1,6 @@
 README.md
 setup.py
 secapi/__init__.py
-secapi/agent.py
 secapi/cli.py
 secapi/fixer.py
 secapi/scanner.py

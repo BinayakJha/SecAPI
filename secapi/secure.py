@@ -2,6 +2,7 @@ import json
 import os
 from getpass import getpass
 from cryptography.fernet import Fernet
+import base64
 
 VAULT_PATH = os.path.expanduser("~/.secapi_vault.json")
 
@@ -12,11 +13,22 @@ def get_fernet():
     key = password.ljust(32, '0').encode()[:32]
     return Fernet(base64.urlsafe_b64encode(key))
 
+def safe_input(prompt_text):
+    """
+    Ask user if they want hidden or visible input.
+    Returns the inputted value.
+    """
+    choice = input(f"{prompt_text} (Press Enter to paste visibly, or type 'h' to hide typing): ").strip().lower()
+    if choice == 'h':
+        from getpass import getpass
+        return getpass("🔐 Enter (hidden): ")
+    else:
+        return input("🔓 Paste your key here: ")
 
 def add_key_interactively():
     print("\n🆕 Add a New API Key")
     key_name = input("Give this key a name (e.g., 'openai_key'): ").strip()
-    key_value = getpass("Paste the value (it will be hidden): ").strip()
+    key_value = safe_input("🔑 Enter your API key").strip()
 
     if not key_name or not key_value:
         print("❌ Key name and value cannot be empty.")
@@ -41,6 +53,8 @@ def add_key_interactively():
     print(f"✅ Key '{key_name}' securely stored in your vault.")
     print("\n🔁 Use it in your code like this:")
     print(f"    {key_name} = load_key(\"{key_name}\")\n")
+
+
 def load_key(key_name):
     if not os.path.exists(VAULT_PATH):
         raise FileNotFoundError("Vault not found. Please run the CLI fixer first.")
