@@ -1,4 +1,4 @@
-# secapi/agent.py (Natural language input, structured AI command output)
+# secapi/agent.py (AI-powered command executor + conversational assistant)
 
 from openai import AzureOpenAI
 from secapi.secure import load_key, add_key_interactively, list_keys, delete_key, rotate_key
@@ -22,19 +22,11 @@ class SecAPIAgent:
             {
                 "role": "system",
                 "content": (
-                    "You are SecAPI Assistant. You interpret natural language and return strict commands only.\n"
-                    "Valid commands:\n"
-                    "- add\n"
-                    "- list\n"
-                    "- delete <key>\n"
-                    "- rotate <key>\n"
-                    "- check <directory>\n"
-                    "- ai <file_or_dir>\n"
-                    "- exit\n\n"
-                    "Return ONLY the command. No explanations. No extra sentences. Examples:\n"
-                    "'remove my GitHub token' → 'delete github_key'\n"
-                    "'scan the src folder' → 'check src'\n"
-                    "'quit' → 'exit'"
+                    "You are SecAPI Assistant. You help users securely manage their API keys, scan projects, and answer related programming or pip questions.\n"
+                    "If the user gives a clear task (e.g., 'add key', 'delete openai_key', 'scan'), respond with only the exact command like:\n"
+                    "- add\n- list\n- delete <key>\n- rotate <key>\n- check <directory>\n- ai <file_or_dir>\n- exit\n"
+                    "If the user is asking a question about this tool, pip usage, programming, or says hello, respond naturally and helpfully.\n"
+                    "Never mix a command with an explanation. Either respond with a command or a full sentence."
                 )
             }
         ]
@@ -45,8 +37,8 @@ class SecAPIAgent:
             response = self.client.chat.completions.create(
                 model=self.deployment,
                 messages=self.chat_history,
-                temperature=0.2,
-                max_tokens=150
+                temperature=0.3,
+                max_tokens=300
             )
             reply = response.choices[0].message.content.strip()
             self.chat_history.append({"role": "assistant", "content": reply})
@@ -69,7 +61,7 @@ class SecAPIAgent:
         if cmd in {"delete", "rotate", "check", "ai"} and arg:
             return (cmd, arg)
 
-        return (None, None)
+        return ("chat", reply_text)  # Treat as conversational response
 
     def execute_command(self, command, value=None):
         try:
@@ -94,6 +86,8 @@ class SecAPIAgent:
             elif command == "exit":
                 print("👋 Goodbye!")
                 exit(0)
+            elif command == "chat" and value:
+                print(f"💬 {value}")
             else:
                 print("❌ Unknown or incomplete command.")
         except Exception as e:
@@ -110,12 +104,8 @@ class SecAPIAgent:
                 if not ai_reply:
                     print("❌ AI could not process your request.")
                     continue
-                print(f"🧠 AI understood: {ai_reply}")
                 command, value = self.parse_command(ai_reply)
-                if command:
-                    self.execute_command(command, value)
-                else:
-                    print("❌ Could not parse the AI's reply. Try rephrasing.")
+                self.execute_command(command, value)
             except KeyboardInterrupt:
                 print("\n👋 Exiting. See you next time!")
                 break

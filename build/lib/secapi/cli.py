@@ -1,7 +1,7 @@
 import argparse
 from secapi.scanner import scan_directory
 from secapi.fixer import suggest_and_fix
-from secapi.secure import load_key, list_keys, delete_key, rotate_key  # assuming you also move these here
+from secapi.secure import load_key, list_keys, delete_key, rotate_key, change_vault_password  # assuming you also move these here
 from secapi.scanner_ai import ai_scan_path
 from secapi.secure import add_key_interactively
 from secapi.agent import run_agent
@@ -13,9 +13,9 @@ def main():
     parser.add_argument(
         "command", metavar="command", type=str,
         choices=[
-            "check", "list", "delete", "rotate", "load", "ai", "add", "agent"
+            "check", "list", "delete", "rotate", "load", "ai", "add", "agent", "change-password"
         ],
-        help="Command to run: check <dir> | list | delete <key_name> | rotate <key_name> | load <key_name> | agent"
+        help="Command to run: check <dir> | list | delete <key_name> | rotate <key_name> | load <key_name> | agent | change-password"
     )
     parser.add_argument("value", nargs="?", help="Path, key name, or file depending on the command.")
 
@@ -51,6 +51,9 @@ def main():
 
     elif args.command == "add":
         add_key_interactively()
+        return
+    elif args.command == "change-password":
+        change_vault_password()
         return
     elif args.command == "check":
         if not args.value:
