@@ -1,29 +1,28 @@
+# secapi/secure.py (Updated with password caching and hidden input only)
+
 import json
 import os
+import base64
 from getpass import getpass
 from cryptography.fernet import Fernet
-import base64
 
 VAULT_PATH = os.path.expanduser("~/.secapi_vault.json")
 
-import base64
-
-def get_fernet():
-    password = getpass("🔐 Enter your password to access the vault: ")
-    key = password.ljust(32, '0').encode()[:32]
-    return Fernet(base64.urlsafe_b64encode(key))
+_fernet_instance = None  # Cache for the Fernet object
 
 def safe_input(prompt_text):
     """
-    Ask user if they want hidden or visible input.
-    Returns the inputted value.
+    Always use hidden input for secrets.
     """
-    choice = input(f"{prompt_text} (Press Enter to paste visibly, or type 'h' to hide typing): ").strip().lower()
-    if choice == 'h':
-        from getpass import getpass
-        return getpass("🔐 Enter (hidden): ")
-    else:
-        return input("🔓 Paste your key here: ")
+    return getpass(f"{prompt_text}: ")
+
+def get_fernet():
+    global _fernet_instance
+    if _fernet_instance is None:
+        password = safe_input("🔐 Enter your vault password")
+        key = password.ljust(32, '0').encode()[:32]
+        _fernet_instance = Fernet(base64.urlsafe_b64encode(key))
+    return _fernet_instance
 
 def add_key_interactively():
     print("\n🆕 Add a New API Key")
@@ -54,7 +53,6 @@ def add_key_interactively():
     print("\n🔁 Use it in your code like this:")
     print(f"    {key_name} = load_key(\"{key_name}\")\n")
 
-
 def load_key(key_name):
     if not os.path.exists(VAULT_PATH):
         raise FileNotFoundError("Vault not found. Please run the CLI fixer first.")
@@ -65,9 +63,9 @@ def load_key(key_name):
     if key_name not in vault:
         raise KeyError(f"Key '{key_name}' not found in the vault.")
 
-    f = get_fernet()
+    fernet = get_fernet()
     encrypted = vault[key_name]
-    decrypted = f.decrypt(encrypted.encode()).decode()
+    decrypted = fernet.decrypt(encrypted.encode()).decode()
     return decrypted
 
 def list_keys():
@@ -114,9 +112,9 @@ def rotate_key(key_name):
         print(f"❌ Key '{key_name}' not found in the vault.")
         return
 
-    new_value = getpass(f"🔁 Enter new value for key '{key_name}': ")
-    f = get_fernet()
-    encrypted = f.encrypt(new_value.encode()).decode()
+    new_value = safe_input(f"🔁 Enter new value for key '{key_name}'").strip()
+    fernet = get_fernet()
+    encrypted = fernet.encrypt(new_value.encode()).decode()
     vault[key_name] = encrypted
     with open(VAULT_PATH, 'w') as f:
         json.dump(vault, f, indent=2)

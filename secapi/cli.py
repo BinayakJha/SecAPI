@@ -4,7 +4,7 @@ from secapi.fixer import suggest_and_fix
 from secapi.secure import load_key, list_keys, delete_key, rotate_key  # assuming you also move these here
 from secapi.scanner_ai import ai_scan_path
 from secapi.secure import add_key_interactively
-
+from secapi.agent import run_agent
 
 def main():
     parser = argparse.ArgumentParser(
@@ -23,6 +23,7 @@ def main():
 
     if args.command == "agent":
         run_agent()
+
     elif args.command == "list":
         list_keys()
     elif args.command == "delete":
