@@ -41,7 +41,7 @@ pip install secapi
 ### First Run  
 Open your terminal and type:
 ```bash
-secapi --help
+secapi -h
 ```
 You’ll see all available commands.
 
