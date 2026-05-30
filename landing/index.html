@@ -38,6 +38,12 @@
             <h1>The secure path is now<br><span class="highlight">the fastest path.</span></h1>
             <p class="tagline">Secure, local-first API key management & leak prevention. Scan your codebase, encrypt secrets into an offline vault, and replace leaks with safe code references in one command.</p>
             
+            <!-- Installer Method Selector -->
+            <div class="install-tabs">
+                <button class="install-tab active" id="tab-curl" onclick="switchInstallTab('curl', event)">Standard Install</button>
+                <button class="install-tab" id="tab-gh" onclick="switchInstallTab('gh', event)">GitHub CLI Extension</button>
+            </div>
+
             <!-- Quick Installer Copy Box -->
             <div class="install-box" onclick="copyInstallCommand()">
                 <span class="prompt">$</span>

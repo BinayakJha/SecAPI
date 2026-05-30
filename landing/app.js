@@ -19,6 +19,27 @@ function copyInstallCommand() {
     });
 }
 
+// 1b. Switch Installer Tabs
+const INSTALL_COMMANDS = {
+    curl: "curl -fsSL https://raw.githubusercontent.com/BinayakJha/SecAPI/main/install.sh | sh",
+    gh: "gh extension install BinayakJha/gh-secapi"
+};
+
+function switchInstallTab(method, event) {
+    if (event) event.stopPropagation();
+    
+    // Update active tab class
+    document.querySelectorAll(".install-tab").forEach(tab => tab.classList.remove("active"));
+    const selectedTab = document.getElementById("tab-" + method);
+    if (selectedTab) selectedTab.classList.add("active");
+    
+    // Update command text
+    const cmdTextEl = document.getElementById("cmdText");
+    if (cmdTextEl && INSTALL_COMMANDS[method]) {
+        cmdTextEl.innerText = INSTALL_COMMANDS[method];
+    }
+}
+
 // 2. Terminal Script Definitions
 const TERMINAL_SCRIPTS = {
     1: [
