@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "secapi"
+version = "0.1.0"
+description = "Secure, intelligent API key management and CLI agent."
+readme = "README.md"
+authors = [
+    { name = "Binayak Jha" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "cryptography>=41.0.0",
+    "openai",
+    "pyyaml"
+]
+requires-python = ">=3.7"
+
+[project.optional-dependencies]
+dev = [
+    "pytest"
+]
+
+[project.scripts]
+secapi = "secapi.cli:main"

@@ -1,2 +1,6 @@
 cryptography>=41.0.0
 openai
+pyyaml
+
+[dev]
+pytest

@@ -1,60 +1,118 @@
 import os
 import re
 import json
-from getpass import getpass
-from openai import OpenAI
-from cryptography.fernet import Fernet
-from secapi.secure import load_key, get_fernet, VAULT_PATH
-
+from secapi.secure import load_key, get_fernet, update_vault
+from secapi.config import get_ai_config
+from secapi.gemini import call_gemini
 
 def ai_scan_file(file_path):
-    """Scan a single file for hardcoded secrets using AI."""
-    token = load_key("gt_token")
-    endpoint = "https://models.github.ai/inference"
-    model = "openai/gpt-4.1"
+    """Scan a single file for hardcoded secrets using AI, with line-aware chunking."""
+    ai_config = get_ai_config()
+    provider = ai_config["provider"]
+    model = ai_config["model"]
+    api_key = ai_config["api_key"]
+    endpoint = ai_config["endpoint"]
 
-    client = OpenAI(
-        base_url=endpoint,
-        api_key=token,
-    )
+    if not api_key:
+        print("❌ Warning: AI API key not found in config, env, or vault. Skipping AI scan.")
+        return
+
+    client = None
+    if provider == "azure":
+        try:
+            from openai import AzureOpenAI
+            client = AzureOpenAI(
+                api_key=api_key,
+                api_version="2023-07-01-preview",
+                azure_endpoint=endpoint
+            )
+        except ImportError:
+            print("❌ Error: The 'openai' library is missing or outdated.")
+            print("Please upgrade it using: pip install --upgrade openai")
+            return
+    elif provider == "openai":
+        try:
+            from openai import OpenAI
+            client = OpenAI(
+                api_key=api_key,
+                base_url=endpoint
+            )
+        except ImportError:
+            print("❌ Error: The 'openai' library is missing or outdated.")
+            print("Please upgrade it using: pip install --upgrade openai")
+            return
 
     try:
         with open(file_path, 'r', errors='ignore') as f:
-            content = f.read()[:4000]  # Trim to fit token limit
+            content = f.read()
 
-        response = client.chat.completions.create(
-            messages=[
-                {
-                    "role": "system",
-                    "content": """
-                    You are a source code security auditor. 
+        lines = content.splitlines()
+        chunks = []
+        current_chunk = []
+        current_length = 0
 
-                    Your job is to scan the code for hardcoded secrets or insecure API key usage. 
-                    ❌ Do NOT return lines that already use secure retrieval methods like `load_key(...)` or environment variables like `os.environ[...]`. 
+        # Chunk the file while prefixing each line with its 1-based index
+        for i, line in enumerate(lines, 1):
+            formatted_line = f"{i}: {line}"
+            if current_length + len(formatted_line) + 1 > 3500:
+                chunks.append("\n".join(current_chunk))
+                current_chunk = [formatted_line]
+                current_length = len(formatted_line)
+            else:
+                current_chunk.append(formatted_line)
+                current_length += len(formatted_line) + 1
+        if current_chunk:
+            chunks.append("\n".join(current_chunk))
 
-                    ✅ Only return lines that directly assign hardcoded secrets.
+        print(f"\n🔍 AI Security Audit (using {provider}/{model}):")
+        print(f"📄 File: {file_path} ({len(chunks)} chunks)")
 
-                    Output format (strict):
-                    🧪 <line_number>: <variable_name> = <secret_string>
+        for chunk_idx, chunk_content in enumerate(chunks, 1):
+            if len(chunks) > 1:
+                print(f"  ⚡ Scanning chunk {chunk_idx}/{len(chunks)}...")
 
-                    Only return one line per issue. No explanations.
-                    """
-                },
-                {
-                    "role": "user",
-                    "content": f"Filename: {file_path}\n\n{content}"
-                }
-            ],
-            model=model,
-            temperature=0.2,
-            top_p=1.0
-        )
+            system_content = """
+            You are a source code security auditor. 
 
-        print("\n🔍 AI Security Audit:")
-        print(f"📄 File: {file_path}\n")
+            Your job is to scan the code for hardcoded secrets or insecure API key usage. 
+            Each line in the input is prefixed with its 1-based line number (e.g. "12: api_key = 'sk_...'").
+            
+            ❌ Do NOT return lines that already use secure retrieval methods like `load_key(...)` or environment variables like `os.environ[...]`. 
 
-        output = response.choices[0].message.content
-        process_ai_output(output, file_path)
+            ✅ Only return lines that directly assign hardcoded secrets.
+
+            Output format (strict):
+            🧪 <line_number>: <variable_name> = <secret_string>
+
+            Only return one line per issue. No explanations.
+            """
+
+            if provider == "gemini":
+                output = call_gemini(
+                    system_instruction=system_content,
+                    messages=[{"role": "user", "content": f"Filename: {file_path}\n\n{chunk_content}"}],
+                    model=model,
+                    api_key=api_key
+                )
+            else:
+                response = client.chat.completions.create(
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": system_content
+                        },
+                        {
+                            "role": "user",
+                            "content": f"Filename: {file_path}\n\n{chunk_content}"
+                        }
+                    ],
+                    model=model,
+                    temperature=0.2,
+                    top_p=1.0
+                )
+                output = response.choices[0].message.content
+
+            process_ai_output(output, file_path)
 
     except Exception as e:
         print(f"❌ AI scan failed: {e}")
@@ -97,48 +155,27 @@ def replace_with_load_key(file_path, line_num, code_line):
     """Replace hardcoded secrets with `load_key()` and store them securely."""
     try:
         key_name = input("Give this key a name (e.g., 'openai_key'): ").strip()
-        secret = code_line.split("=")[1].strip().strip('"')
+        if not key_name:
+            print("❌ Key name cannot be empty. Skipping.")
+            return
 
+        parts = code_line.split("=", 1)
+        if len(parts) < 2:
+            print("❌ Could not parse secret from AI output. Skipping.")
+            return
+
+        secret = parts[1].strip().strip('"').strip("'")
         fernet = get_fernet()
         encrypted = fernet.encrypt(secret.encode()).decode()
 
-        with open(file_path, 'r') as f:
-            all_lines = f.readlines()
-
-        # Check if load_key is already imported
-        if not any("load_key" in line for line in all_lines[:line_num]):
-            all_lines.insert(1, "from secapi.secure import load_key\n")
-
-        # Replace the line with load_key
-        variable_name = code_line.split("=")[0].strip()
-        indent = re.match(r"^\s*", all_lines[line_num - 1]).group(0)
-        all_lines[line_num - 1] = f"{indent}{variable_name} = load_key(\"{key_name}\")\n"
-
-        with open(file_path, 'w') as f:
-            f.writelines(all_lines)
-
-        # Update the vault
+        from secapi.fixer import update_file
+        update_file(file_path, line_num, key_name)
         update_vault(key_name, encrypted)
         print(f"✅ Replaced and stored key '{key_name}' securely.\n")
 
     except Exception as e:
         print(f"❌ Failed to replace secret: {e}")
 
-
-def update_vault(key_name, encrypted):
-    """Update the vault with the new encrypted secret."""
-    try:
-        if os.path.exists(VAULT_PATH):
-            with open(VAULT_PATH, 'r') as v:
-                vault = json.load(v)
-        else:
-            vault = {}
-
-        vault[key_name] = encrypted
-        with open(VAULT_PATH, 'w') as v:
-            json.dump(vault, v, indent=2)
-    except Exception as e:
-        print(f"❌ Failed to update vault: {e}")
 
 
 def ai_scan_path(path):

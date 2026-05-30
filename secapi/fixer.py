@@ -1,41 +1,53 @@
 # Handles encryption and replacement
 import os
 import re
-import json
-import base64
-from getpass import getpass
-from cryptography.fernet import Fernet
-from secapi.secure import load_key
-
-VAULT_PATH = os.path.expanduser("~/.secapi_vault.json")
-
-
-def get_fernet():
-    """
-    Prompts the user for a password to access the vault and generates a Fernet
-    encryption object. The password is padded to 32 bytes and encoded to create
-    a base64 URL-safe encryption key.
-    """
-    try:
-        password = getpass("🔐 Enter your password to access the vault: ")
-        key = password.ljust(32, '0').encode()[:32]
-        return Fernet(base64.urlsafe_b64encode(key))
-    except Exception as e:
-        print(f"❌ Failed to generate encryption key: {e}")
-        raise
-
+from secapi.secure import load_key, get_fernet, update_vault
 
 def update_file(file, line_num, key_name):
     """
     Updates the specified line in the file to replace the hardcoded secret
     with a secure reference using `load_key()`.
+    Preserves the original variable name (LHS).
     """
     try:
         with open(file, 'r') as f_in:
             lines = f_in.readlines()
 
-        new_line = f"{key_name} = load_key(\"{key_name}\")\n"
-        lines[line_num - 1] = new_line
+        # Check if load_key is already imported in the file
+        has_import = any("load_key" in line for line in lines)
+        target_idx = line_num - 1
+
+        if not has_import:
+            insert_idx = 0
+            if lines and (lines[0].startswith('#!') or lines[0].startswith('# -*-')):
+                insert_idx = 1
+            lines.insert(insert_idx, "from secapi.secure import load_key\n")
+            target_idx += 1  # Shifted due to insertion
+
+        target_line = lines[target_idx]
+        
+        # Match pattern: indentation, variable/LHS, '=', quotes, secret, quotes, trailing
+        # Regex explanation:
+        # ^(\s*)       -> Group 1: Leading indentation
+        # ([A-Za-z0-9_\-\[\]\'"\.]+) -> Group 2: LHS (variable name, config key, etc.)
+        # \s*=\s*      -> assignment operator with optional spaces
+        # (["\'])      -> Group 3: Opening quote
+        # (.*?)        -> Group 4: The secret string
+        # \3           -> Match corresponding closing quote
+        # (.*)$        -> Group 5: Trailing comments/whitespace
+        pattern = r'^(\s*)([A-Za-z0-9_\-\[\]\'"\.]+)\s*=\s*(["\'])(.*?)\3(.*)$'
+        match = re.match(pattern, target_line)
+        
+        if match:
+            indent = match.group(1)
+            lhs = match.group(2)
+            trailing = match.group(5)
+            new_line = f'{indent}{lhs} = load_key("{key_name}"){trailing}\n'
+            lines[target_idx] = new_line
+        else:
+            # Fallback if the match is not a standard assignment
+            new_line = f'{key_name} = load_key("{key_name}")\n'
+            lines[target_idx] = new_line
 
         with open(file, 'w') as f_out:
             f_out.writelines(lines)
@@ -44,29 +56,6 @@ def update_file(file, line_num, key_name):
     except Exception as e:
         print(f"❌ Failed to update file '{file}': {e}")
         raise
-
-
-def update_vault(key_name, encrypted):
-    """
-    Updates the vault with the new encrypted secret.
-    """
-    try:
-        if os.path.exists(VAULT_PATH):
-            with open(VAULT_PATH, 'r') as v:
-                vault = json.load(v)
-        else:
-            vault = {}
-
-        vault[key_name] = encrypted
-
-        with open(VAULT_PATH, 'w') as v:
-            json.dump(vault, v, indent=2)
-
-        print(f"✅ Key '{key_name}' securely stored in the vault.")
-    except Exception as e:
-        print(f"❌ Failed to update vault: {e}")
-        raise
-
 
 def suggest_and_fix(file, line_num, line_content, label):
     """
@@ -82,17 +71,23 @@ def suggest_and_fix(file, line_num, line_content, label):
     if choice in {"1", "2"}:
         try:
             fernet = get_fernet()
-            key_match = re.search(r'"(.*?)"', line_content)
+            
+            # Find the secret string enclosed in quotes
+            key_match = re.search(r'["\'](.*?)["\']', line_content)
             if key_match:
                 secret = key_match.group(1)
                 encrypted = fernet.encrypt(secret.encode()).decode()
                 key_name = input("Give this key a name (e.g., 'openai_key'): ").strip()
 
+                if not key_name:
+                    print("❌ Key name cannot be empty. Skipping.")
+                    return
+
                 # Update the file and vault
                 update_file(file, line_num, key_name)
                 update_vault(key_name, encrypted)
             else:
-                print("❌ No valid secret found in the line.")
+                print("❌ No valid secret string literal found in quotes.")
         except Exception as e:
             print(f"❌ Failed to process the secret: {e}")
     elif choice == "3":

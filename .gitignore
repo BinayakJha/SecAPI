@@ -1,0 +1,18 @@
+# Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Testing & builds
+.pytest_cache/
+.eggs/
+build/
+dist/
+*.egg-info/
+
+# Local vault keys (critical to exclude!)
+.secapi_vault*
+secapi_config.yaml
+test_sandbox/
+demo_project/

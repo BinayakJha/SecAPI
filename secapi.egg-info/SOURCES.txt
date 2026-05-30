@@ -1,8 +1,10 @@
 README.md
+pyproject.toml
 setup.py
 secapi/__init__.py
 secapi/agent.py
 secapi/cli.py
+secapi/config.py
 secapi/fixer.py
 secapi/scanner.py
 secapi/scanner_ai.py
@@ -13,3 +15,5 @@ secapi.egg-info/dependency_links.txt
 secapi.egg-info/entry_points.txt
 secapi.egg-info/requires.txt
 secapi.egg-info/top_level.txt
+tests/test_scanner_fixer.py
+tests/test_secure.py

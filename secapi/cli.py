@@ -1,7 +1,7 @@
 import argparse
 from secapi.scanner import scan_directory
 from secapi.fixer import suggest_and_fix
-from secapi.secure import load_key, list_keys, delete_key, rotate_key, change_vault_password  # assuming you also move these here
+from secapi.secure import load_key, list_keys, delete_key, rotate_key, change_vault_password, recover_vault
 from secapi.scanner_ai import ai_scan_path
 from secapi.secure import add_key_interactively
 from secapi.agent import run_agent
@@ -13,13 +13,24 @@ def main():
     parser.add_argument(
         "command", metavar="command", type=str,
         choices=[
-            "check", "list", "delete", "rotate", "load", "ai", "add", "agent", "change-password"
+            "check", "list", "delete", "rotate", "load", "ai", "add", "agent", "change-password", "recover", "init-hook"
         ],
-        help="Command to run: check <dir> | list | delete <key_name> | rotate <key_name> | load <key_name> | agent | change-password"
+        help="Command to run: check <dir> | list | delete <key_name> | rotate <key_name> | load <key_name> | agent | change-password | recover | init-hook"
     )
     parser.add_argument("value", nargs="?", help="Path, key name, or file depending on the command.")
+    parser.add_argument(
+        "--no-fix", action="store_true",
+        help="Report findings and exit with non-zero code if secrets are found (non-interactive mode)."
+    )
+    parser.add_argument(
+        "--env", "-e", type=str, default=None,
+        help="Specify vault environment profile (e.g. dev, staging, prod)."
+    )
 
     args = parser.parse_args()
+
+    from secapi.secure import set_current_env
+    set_current_env(args.env)
 
     if args.command == "agent":
         run_agent()
@@ -55,6 +66,13 @@ def main():
     elif args.command == "change-password":
         change_vault_password()
         return
+    elif args.command == "recover":
+        recover_vault()
+        return
+    elif args.command == "init-hook":
+        from secapi.hooks import install_pre_commit_hook
+        install_pre_commit_hook()
+        return
     elif args.command == "check":
         if not args.value:
             print("❌ Please provide a directory path to scan.")
@@ -68,6 +86,12 @@ def main():
             print(f"[{idx + 1}] 🔑 Potential secret in {file} at line {line_num}:")
             print(f"    {line_content.strip()}")
             print(f"    ➤ Matched pattern: {match}\n")
+
+        if args.no_fix:
+            print(f"❌ Scan failed: Found {len(findings)} potential secret(s).")
+            import sys
+            sys.exit(1)
+
         for finding in findings:
             suggest_and_fix(*finding)
 
