@@ -67,8 +67,15 @@ def call_gemini(system_instruction, messages, model="gemini-2.5-flash", api_key=
             res_data = response.read().decode("utf-8")
             res_json = json.loads(res_data)
             
-            # Extract generated text
-            text = res_json["candidates"][0]["content"]["parts"][0]["text"]
+            # Extract generated text safely
+            candidates = res_json.get("candidates", [])
+            if not candidates:
+                return ""
+            content = candidates[0].get("content", {})
+            parts = content.get("parts", [])
+            if not parts:
+                return ""
+            text = parts[0].get("text", "")
             return text.strip()
     except urllib.error.HTTPError as e:
         error_content = e.read().decode("utf-8")
