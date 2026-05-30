@@ -68,6 +68,18 @@ const TERMINAL_SCRIPTS = {
         { type: "output", delay: 400, text: "🔍 Running SecAPI Pre-commit Hook...\n" },
         { type: "output", delay: 200, text: "<span class='term-red term-bold'>❌ Blocked:</span> Found unencrypted secret in gateway.py line 12!\n" },
         { type: "output", delay: 100, text: "<span class='term-yellow'>Please vault it using 'secapi check' before committing.</span>\n" }
+    ],
+    6: [
+        { type: "input", text: "gh extension install BinayakJha/gh-secapi" },
+        { type: "output", delay: 450, text: "\n✓ Installed extension BinayakJha/gh-secapi\n" },
+        { type: "output", delay: 300, text: "<span class='term-prompt'>user@dev:~/my_project$</span> gh secapi list\n" },
+        { type: "output", delay: 500, text: "\n============================================================\n" },
+        { type: "output", delay: 50, text: "                    <span class='term-bold term-cyan'>SECAPI KEY MANAGER (GH CLI)</span>\n" },
+        { type: "output", delay: 50, text: "============================================================\n" },
+        { type: "output", delay: 50, text: "KEY NAME            STATUS         AGE (DAYS)    CREATED AT\n" },
+        { type: "output", delay: 50, text: "------------------------------------------------------------\n" },
+        { type: "output", delay: 50, text: "stripe_key          <span class='term-green'>🟢 ACTIVE</span>      0             2026-05-30\n" },
+        { type: "output", delay: 50, text: "============================================================\n" }
     ]
 };
 
