@@ -5,7 +5,10 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Python: 3.7+](https://img.shields.io/badge/Python-3.7+-green.svg)](#)
 [![Security: AES-256](https://img.shields.io/badge/Security-AES--256-red.svg)](#)
-[![Tests: 11/11 Passing](https://img.shields.io/badge/Tests-11%2F11%20Passing-brightgreen.svg)](#)
+[![Tests: 12/12 Passing](https://img.shields.io/badge/Tests-12%2F12%20Passing-brightgreen.svg)](#)
+[![Website: secapi.netlify.app](https://img.shields.io/badge/Website-secapi.netlify.app-10B981.svg)](https://secapi.netlify.app/)
+
+🌐 **Explore the Interactive Showcase**: **[secapi.netlify.app](https://secapi.netlify.app/)**
 
 ---
 
