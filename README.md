@@ -34,13 +34,25 @@ Hardcoding API keys in repository files is one of the leading causes of security
 
 ## 🚦 Getting Started
 
-### Prerequisites
-* Python 3.7+
-* pip
-
 ### 1. Installation
-Clone the repository and install it in editable mode:
+
+#### Option A: One-Command Universal Installer (Recommended)
+For an automated, zero-config installation directly from git:
 ```bash
+curl -fsSL https://raw.githubusercontent.com/BinayakJha/SecAPI/main/install.sh | sh
+```
+
+#### Option B: Isolated Python Installation via pipx
+If you prefer standard Python package isolation:
+```bash
+pipx install git+https://github.com/BinayakJha/SecAPI.git
+```
+
+#### Option C: Manual/Development Setup
+Clone the repository and install it locally:
+```bash
+git clone https://github.com/BinayakJha/SecAPI.git
+cd SecAPI
 pip install -e .
 ```
 
