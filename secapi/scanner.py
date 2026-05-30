@@ -59,10 +59,37 @@ def should_ignore(path, root_dir, patterns):
 
     return False
 
+def scan_file(path, findings):
+    file = os.path.basename(path)
+    if file.endswith(('.py', '.js', '.ts', '.env', '.json', '.yml', '.yaml', '.txt')):
+        try:
+            with open(path, 'r', errors='ignore') as f:
+                for i, line in enumerate(f, 1):
+                    # Skip lines that are importing or using secure retrieval methods
+                    if "load_key" in line or "os.environ" in line or "os.getenv" in line:
+                        continue
+                    for label, pattern in PATTERNS.items():
+                        match = re.search(pattern, line)
+                        if match:
+                            findings.append((path, i, line.strip(), label))
+                            break
+        except (PermissionError, IsADirectoryError, UnicodeDecodeError):
+            pass  # Silently skip unreadable or invalid files
+
 def scan_directory(directory):
     findings = []
-    patterns = load_ignore_patterns(directory)
+    
+    # If the target is a single file, scan it directly
+    if os.path.isfile(directory):
+        abs_path = os.path.abspath(directory)
+        parent_dir = os.path.dirname(abs_path)
+        patterns = load_ignore_patterns(parent_dir)
+        if not should_ignore(abs_path, parent_dir, patterns):
+            scan_file(abs_path, findings)
+        return findings
 
+    # If the target is a directory, traverse it
+    patterns = load_ignore_patterns(directory)
     for root, dirs, files in os.walk(directory, topdown=True):
         # Filter directory traversal to avoid ignored directories
         dirs[:] = [d for d in dirs if not should_ignore(os.path.join(root, d), directory, patterns)]
@@ -71,19 +98,5 @@ def scan_directory(directory):
             path = os.path.join(root, file)
             if should_ignore(path, directory, patterns):
                 continue
-
-            if file.endswith(('.py', '.js', '.ts', '.env', '.json', '.yml', '.yaml', '.txt')):
-                try:
-                    with open(path, 'r', errors='ignore') as f:
-                        for i, line in enumerate(f, 1):
-                            # Skip lines that are importing or using secure retrieval methods
-                            if "load_key" in line or "os.environ" in line or "os.getenv" in line:
-                                continue
-                            for label, pattern in PATTERNS.items():
-                                match = re.search(pattern, line)
-                                if match:
-                                    findings.append((path, i, line.strip(), label))
-                                    break
-                except (PermissionError, IsADirectoryError, UnicodeDecodeError):
-                    pass  # Silently skip unreadable or invalid files
+            scan_file(path, findings)
     return findings

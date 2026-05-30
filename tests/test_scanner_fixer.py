@@ -94,3 +94,16 @@ def test_pre_commit_hook_install(tmp_path, monkeypatch):
         content = f.read()
     assert "SecAPI Pre-commit Hook" in content
 
+
+def test_scan_single_file(tmp_path):
+    dirty_file = tmp_path / "app.py"
+    dirty_file.write_text("my_key = \"sk_test_" + "51NzABCDeFGHIJKLMNOPQRST\"\n")
+
+    # Scan the file path directly
+    findings = scan_directory(str(dirty_file))
+    assert len(findings) == 1
+    assert "app.py" in findings[0][0]
+    assert findings[0][1] == 1
+    assert findings[0][3] == "Stripe"
+
+

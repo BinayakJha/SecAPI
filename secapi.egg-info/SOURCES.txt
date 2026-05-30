@@ -6,6 +6,8 @@ secapi/agent.py
 secapi/cli.py
 secapi/config.py
 secapi/fixer.py
+secapi/gemini.py
+secapi/hooks.py
 secapi/scanner.py
 secapi/scanner_ai.py
 secapi/secure.py
