@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecAPI - Secure, AI-Driven API Key Management</title>
+    <!-- Modern Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Premium Glowing Background Particles -->
+    <div class="glow-bg"></div>
+    <div class="grid-bg"></div>
+
+    <!-- Header Navigation -->
+    <header class="header">
+        <div class="logo">
+            <span class="logo-icon">🔒</span> SecAPI
+        </div>
+        <nav class="nav">
+            <a href="#features">Features</a>
+            <a href="https://github.com/BinayakJha/SecAPI" target="_blank" class="github-link">
+                <svg class="git-icon" viewBox="0 0 16 16" width="20" height="20">
+                    <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                </svg>
+                GitHub
+            </a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <main class="hero">
+        <div class="hero-content">
+            <span class="badge">🚀 DEV.to Challenge Entry</span>
+            <h1>The secure path is now<br><span class="highlight">the fastest path.</span></h1>
+            <p class="tagline">Secure, local-first API key management & leak prevention. Scan your codebase, encrypt secrets into an offline vault, and replace leaks with safe code references in one command.</p>
+            
+            <!-- Quick Installer Copy Box -->
+            <div class="install-box" onclick="copyInstallCommand()">
+                <span class="prompt">$</span>
+                <span class="command-text" id="cmdText">curl -fsSL https://raw.githubusercontent.com/BinayakJha/SecAPI/main/install.sh | sh</span>
+                <button class="copy-btn" id="copyBtn">Copy</button>
+            </div>
+            <div class="copy-feedback" id="copyFeedback">✓ Copied to clipboard!</div>
+        </div>
+    </main>
+
+    <!-- Scrollytelling Interactive Section -->
+    <section class="showcase-section" id="features">
+        <div class="showcase-container">
+            <!-- Left Side: Scrolling Milestones -->
+            <div class="steps-scroller" id="tracked">
+                
+                <div class="step-card" data-step="1">
+                    <div class="step-num">01</div>
+                    <h2>Deep Secrets Scanning</h2>
+                    <p>Audit your codebase instantly. SecAPI scans directory trees (filtering out dependencies like <code>node_modules</code> and honoring <code>.secapiignore</code> profiles) using lightning-fast regex rules or line-aware AI to discover raw Stripe, AWS, OpenAI, Slack, Google, and generic credentials.</p>
+                </div>
+
+                <div class="step-card" data-step="2">
+                    <div class="step-num">02</div>
+                    <h2>Dual-Encrypted Vaulting</h2>
+                    <p>SecAPI derives strong keys using <strong>PBKDF2-HMAC (100,000 iterations of SHA-256)</strong>. It generates a 24-character Mnemonic Recovery Key during vault setup—permitting password resets without risk of data loss. Encryption and decryption are strictly local; no keys ever touch a server.</p>
+                </div>
+
+                <div class="step-card" data-step="3">
+                    <div class="step-num">03</div>
+                    <h2>LHS-Preserving Replacements</h2>
+                    <p>Say goodbye to breaking imports or configuration mappings. The smart fixer parses variable assignments and swaps out only the string literal (RHS) for <code>load_key("key")</code>, preserving the LHS variable name, indentation, and comments.</p>
+                </div>
+
+                <div class="step-card" data-step="4">
+                    <div class="step-num">04</div>
+                    <h2>Terminal Status Board</h2>
+                    <p>Visualize key usage across environments. Running <code>secapi list</code> renders a responsive ANSI dashboard showcasing key names, ages (in days), creation timestamps, and warning tags (🟢 <code>Active</code>, 🟡 <code>Rotate Soon</code>, 🔴 <code>Expired</code>).</p>
+                </div>
+
+                <div class="step-card" data-step="5">
+                    <div class="step-num">05</div>
+                    <h2>Pre-Commit Protection</h2>
+                    <p>Block leaks before they reach GitHub. Running <code>secapi init-hook</code> sets up an executable git hook that intercepts commits, scans staged modifications in a non-interactive mode, and halts code pushes if plaintext secrets are found.</p>
+                </div>
+
+            </div>
+
+            <!-- Right Side: Sticky Interactive Terminal -->
+            <div class="terminal-sticky">
+                <div class="terminal-window">
+                    <div class="terminal-bar">
+                        <div class="terminal-dots">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                        </div>
+                        <div class="terminal-title">bash — secapi — local-session</div>
+                    </div>
+                    <div class="terminal-body" id="terminalOutput">
+                        <span class="term-prompt">user@dev:~/my_project$</span> <span class="term-cursor"></span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Built for the GitHub Finish-Up-A-Thon Challenge. Distributed under the MIT License.</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>

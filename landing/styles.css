@@ -1,0 +1,424 @@
+/* landing/styles.css */
+
+:root {
+    --bg-color: #090A0F;
+    --surface-color: rgba(18, 20, 29, 0.65);
+    --border-color: rgba(16, 185, 129, 0.15);
+    --text-primary: #F3F4F6;
+    --text-secondary: #9CA3AF;
+    --accent-color: #10B981; /* Neon Emerald */
+    --accent-hover: #059669;
+    --glow-color: rgba(16, 185, 129, 0.25);
+    --term-bg: #0D0E15;
+    --font-outfit: 'Outfit', sans-serif;
+    --font-code: 'Fira Code', monospace;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    font-family: var(--font-outfit);
+    overflow-x: hidden;
+    line-height: 1.6;
+}
+
+/* --- Premium Backgrounds --- */
+.glow-bg {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60vw;
+    height: 60vw;
+    background: radial-gradient(circle, var(--glow-color) 0%, rgba(9, 10, 15, 0) 70%);
+    filter: blur(80px);
+    z-index: -2;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.grid-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-size: 40px 40px;
+    background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* --- Header --- */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 5%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    letter-spacing: -0.5px;
+}
+
+.logo-icon {
+    font-size: 1.3rem;
+}
+
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.nav a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.nav a:hover {
+    color: var(--accent-color);
+}
+
+.github-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+.github-link:hover {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px var(--glow-color);
+}
+
+/* --- Hero Section --- */
+.hero {
+    min-height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 8rem 5% 4rem 5%;
+    text-align: center;
+    position: relative;
+}
+
+.hero-content {
+    max-width: 800px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.badge {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--accent-color);
+    border: 1px solid var(--border-color);
+    padding: 0.35rem 1rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.hero h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -1.5px;
+}
+
+.highlight {
+    color: var(--accent-color);
+    text-shadow: 0 0 30px var(--glow-color);
+}
+
+.tagline {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+    max-width: 650px;
+    margin-bottom: 2rem;
+}
+
+/* --- Installer Copy Box --- */
+.install-box {
+    display: flex;
+    align-items: center;
+    background: rgba(13, 14, 21, 0.8);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-family: var(--font-code);
+    font-size: 0.95rem;
+    max-width: 100%;
+    cursor: pointer;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s;
+    position: relative;
+    user-select: none;
+}
+
+.install-box:hover {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.2), 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.prompt {
+    color: var(--accent-color);
+    margin-right: 0.75rem;
+    font-weight: bold;
+}
+
+.command-text {
+    color: #E5E7EB;
+    overflow-x: auto;
+    white-space: nowrap;
+    margin-right: 1.5rem;
+}
+
+.copy-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-secondary);
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.install-box:hover .copy-btn {
+    background: var(--accent-color);
+    color: #FFF;
+    border-color: var(--accent-color);
+}
+
+.copy-feedback {
+    color: var(--accent-color);
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0;
+    transform: translateY(5px);
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+}
+
+.copy-feedback.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* --- Showcase Section (Scrollytelling) --- */
+.showcase-section {
+    padding: 4rem 5% 10rem 5%;
+}
+
+.showcase-container {
+    display: grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: 5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Left Scroller Card Column */
+.steps-scroller {
+    display: flex;
+    flex-direction: column;
+}
+
+.step-card {
+    min-height: 60vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-left: 2px solid rgba(255, 255, 255, 0.05);
+    padding-left: 2rem;
+    margin-bottom: 5vh;
+    transition: all 0.4s ease;
+    opacity: 0.3;
+}
+
+.step-card.active {
+    opacity: 1;
+    border-left-color: var(--accent-color);
+}
+
+.step-num {
+    font-family: var(--font-code);
+    font-size: 1rem;
+    color: var(--accent-color);
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.step-card h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    letter-spacing: -0.5px;
+}
+
+.step-card p {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+}
+
+/* Right Sticky Terminal Column */
+.terminal-sticky {
+    position: sticky;
+    top: 15vh;
+    height: 70vh;
+    display: flex;
+    align-items: center;
+}
+
+.terminal-window {
+    width: 100%;
+    height: 500px;
+    background-color: var(--term-bg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.terminal-bar {
+    background: rgba(255, 255, 255, 0.03);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.terminal-dots {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+.dot.red { background-color: #EF4444; }
+.dot.yellow { background-color: #F59E0B; }
+.dot.green { background-color: #10B981; }
+
+.terminal-title {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-family: var(--font-code);
+}
+
+.terminal-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    font-family: var(--font-code);
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #D1D5DB;
+    overflow-y: auto;
+    white-space: pre-wrap;
+}
+
+.term-prompt {
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+.term-cursor {
+    display: inline-block;
+    width: 8px;
+    height: 15px;
+    background-color: var(--accent-color);
+    animation: blink 1s infinite;
+    vertical-align: middle;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+/* Colors for Terminal Outputs */
+.term-cyan { color: #06B6D4; }
+.term-yellow { color: #F59E0B; }
+.term-red { color: #EF4444; }
+.term-green { color: #10B981; }
+.term-gray { color: #6B7280; }
+.term-magenta { color: #EC4899; }
+.term-bold { font-weight: bold; }
+
+/* --- Footer --- */
+.footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 3rem 5%;
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+/* --- Responsive Adjustments --- */
+@media (max-width: 900px) {
+    .showcase-container {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+    }
+    
+    .terminal-sticky {
+        position: static;
+        height: auto;
+    }
+    
+    .terminal-window {
+        height: 380px;
+    }
+    
+    .step-card {
+        min-height: auto;
+        margin-bottom: 3rem;
+    }
+    
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+}
