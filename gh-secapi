@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# GitHub CLI Extension wrapper for SecAPI
+
+# Find the directory of this script
+DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Determine which python interpreter to use
+if command -v python3 >/dev/null 2>&1; then
+    PYTHON_CMD="python3"
+elif command -v python >/dev/null 2>&1; then
+    PYTHON_CMD="python"
+else
+    echo "❌ Error: Python 3 is required to run SecAPI." >&2
+    exit 1
+fi
+
+# Set up virtual environment locally inside the extension directory
+VENV_DIR="$DIR/.venv"
+if [ ! -d "$VENV_DIR" ]; then
+    echo "📦 Initializing SecAPI isolated environment..." >&2
+    $PYTHON_CMD -m venv "$VENV_DIR"
+    "$VENV_DIR/bin/pip" install --upgrade pip >/dev/null 2>&1
+fi
+
+# Ensure the package is installed/updated in the venv
+if [ -f "$DIR/setup.py" ] || [ -f "$DIR/pyproject.toml" ]; then
+    # Install the local package in editable mode so it's always up-to-date
+    "$VENV_DIR/bin/pip" install -e "$DIR" >/dev/null 2>&1
+else
+    echo "❌ Error: Could not find setup.py or pyproject.toml in $DIR" >&2
+    exit 1
+fi
+
+# Execute the local secapi command within the virtual environment
+exec "$VENV_DIR/bin/secapi" "$@"

@@ -16,3 +16,4 @@ dist/
 secapi_config.yaml
 test_sandbox/
 demo_project/
+.venv/
