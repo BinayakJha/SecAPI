@@ -5,7 +5,7 @@ import os
 import urllib.request
 import urllib.error
 
-def call_gemini(system_instruction, messages, model="gemini-1.5-flash", api_key=None):
+def call_gemini(system_instruction, messages, model="gemini-2.5-flash", api_key=None):
     """
     Calls the Google Gemini API using urllib.request.
     

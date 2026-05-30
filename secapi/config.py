@@ -26,7 +26,7 @@ def get_ai_config():
     provider = ai_section.get("provider") or os.environ.get("SECAPI_AI_PROVIDER", "gemini").lower()
 
     # 2. Model
-    default_model = "gemini-1.5-flash"
+    default_model = "gemini-2.5-flash"
     if provider == "openai":
         default_model = "gpt-4o-mini"
     elif provider == "azure":
