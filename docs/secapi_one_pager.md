@@ -62,4 +62,4 @@ We are seeking a **partnership or integration path** to bring client-side auto-r
 
 *   **Interactive Demo**: [secapi.netlify.app](https://secapi.netlify.app/)
 *   **Codebase**: [github.com/BinayakJha/SecAPI](https://github.com/BinayakJha/SecAPI)
-*   **Contact**: [binayak.j2027@gmail.com] | [linkedin.com/in/binayak-jha]
+*   **Contact**: [binayak.j2027@gmail.com] | [https://linkedin.com/in/binayak-jha]
