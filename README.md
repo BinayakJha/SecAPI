@@ -32,6 +32,7 @@ Hardcoding API keys in repository files is one of the leading causes of security
 * 👥 **Multi-Environment Profiles**: Route vault profiles (e.g. `dev`, `staging`, `prod`) using `--env` parameters or by setting `export SECAPI_ENV=prod`.
 * 🤖 **Smart LHS-Preserving Fixer**: Parses assignments and replaces only the string literal (RHS) of a leak, keeping variable names (LHS) and trailing comments intact.
 * 🗣️ **Conversational AI Agent & Audits (Gemini & OpenAI)**: Scan files using on-device AI. Defaults to a zero-dependency **Google Gemini** implementation built with standard library `urllib`, avoiding local package version conflicts.
+* 🐙 **GitHub CLI Extension**: Run SecAPI directly inside your GitHub CLI workflow. Install with `gh extension install BinayakJha/gh-secapi` and manage credentials natively with `gh secapi`.
 
 ---
 
@@ -39,19 +40,26 @@ Hardcoding API keys in repository files is one of the leading causes of security
 
 ### 1. Installation
 
-#### Option A: One-Command Universal Installer (Recommended)
+#### Option A: GitHub CLI Extension (Simplest for GitHub users)
+Install SecAPI directly as a native GitHub CLI (`gh`) extension:
+```bash
+gh extension install BinayakJha/gh-secapi
+```
+*Note: Once installed, substitute any `secapi` command with `gh secapi` (e.g., `gh secapi check .`).*
+
+#### Option B: One-Command Universal Installer (Recommended for standard Python environment)
 For an automated, zero-config installation directly from git:
 ```bash
 curl -fsSL https://raw.githubusercontent.com/BinayakJha/SecAPI/main/install.sh | sh
 ```
 
-#### Option B: Isolated Python Installation via pipx
+#### Option C: Isolated Python Installation via pipx
 If you prefer standard Python package isolation:
 ```bash
 pipx install git+https://github.com/BinayakJha/SecAPI.git
 ```
 
-#### Option C: Manual/Development Setup
+#### Option D: Manual/Development Setup
 Clone the repository and install it locally:
 ```bash
 git clone https://github.com/BinayakJha/SecAPI.git
