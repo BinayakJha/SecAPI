@@ -28,12 +28,19 @@ Hardcoding API keys in repository files is one of the leading causes of security
 ## ✨ Features
 
 * 🔒 **Double-Encrypted local Vault**: Uses PBKDF2-HMAC (100,000 iterations of SHA-256) to derive keys from your master password. No data ever leaves your machine.
+  
 * 🔑 **Emergency Recovery Keys**: Generates a 24-character recovery phrase (`XXXX-XXXX-...`) upon initialization. If you forget your password, you can safely reset it without losing keys.
+  
 * 🛑 **Automatic Git Pre-commit Hooks**: Protects your codebase. Run `secapi init-hook` to block commits automatically if any unencrypted secrets are introduced.
+  
 * 🎨 **Interactive TUI Dashboard**: Running `secapi list` displays an ANSI color-coded status board showing key names, ages, creation dates, and lifecycle statuses (🟢 `Active`, 🟡 `Rotate Soon`, 🔴 `Expired`).
+  
 * 👥 **Multi-Environment Profiles**: Route vault profiles (e.g. `dev`, `staging`, `prod`) using `--env` parameters or by setting `export SECAPI_ENV=prod`.
+  
 * 🤖 **Smart LHS-Preserving Fixer**: Parses assignments and replaces only the string literal (RHS) of a leak, keeping variable names (LHS) and trailing comments intact.
+
 * 🗣️ **Conversational AI Agent & Audits (Gemini & OpenAI)**: Scan files using on-device AI. Defaults to a zero-dependency **Google Gemini** implementation built with standard library `urllib`, avoiding local package version conflicts.
+  
 * 🐙 **GitHub CLI Extension**: Run SecAPI directly inside your GitHub CLI workflow. Install with `gh extension install BinayakJha/gh-secapi` and manage credentials natively with `gh secapi`.
 
 ---
