@@ -9,6 +9,7 @@
 [![Website: secapi.netlify.app](https://img.shields.io/badge/Website-secapi.netlify.app-10B981.svg)](https://secapi.netlify.app/)
 
 🌐 **Explore the Interactive Showcase**: **[secapi.netlify.app](https://secapi.netlify.app/)**
+
 📄 **Read the Executive Proposal**: **[SecAPI One-Pager](docs/secapi_one_pager.md)**
 
 ---
